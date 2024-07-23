@@ -68,28 +68,6 @@ def remove_unnamed_cols(df):
             df = df.drop(columns = [c])
     return df
 
-# def detect_delimiter(filepath):
-#     with open(filepath, 'rb') as file:
-#         first_bytes = file.read(1024)
-#         encoding = 'utf-8'
-#         delimiters = [',', ';', '\t', '|']
-#         for delimiter in delimiters:
-#             try:
-#                 first_line = first_bytes.decode(encoding).split('\n')[0]
-#                 if delimiter in first_line:
-#                     return delimiter, encoding
-#             except UnicodeDecodeError:
-#                 continue
-#         # Try Latin-1 encoding
-#         encoding = 'latin1'
-#         for delimiter in delimiters:
-#             try:
-#                 first_line = first_bytes.decode(encoding).split('\n')[0]
-#                 if delimiter in first_line:
-#                     return delimiter, encoding
-#             except UnicodeDecodeError:
-#                 continue
-#     return ',', 'utf-8'
 def detect_delimiter(filepath):
     with open(filepath, 'rb') as f:
         # Read a small part of the file to determine encoding
