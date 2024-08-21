@@ -1,6 +1,4 @@
 # File: get.py
-# pip install -e /Users/merilin/Documents/GitHub/geihdanepy 
-
 
 import pandas as pd 
 import urllib
@@ -9,8 +7,6 @@ import collections
 import os
 from .utils import __referenciador_modulo, __referenciador_modulo_2020, __referenciador_zona, __referenciador_zona_2020, meses, __referenciador_modulo_macro2018, __referenciador_modulo_macro2018_alt, remove_unnamed_cols, detect_delimiter
 import datetime
-
-cwd = '/Users/merilin/Documents/GitHub/geihdanepy'
 
 def __link(año:int, mes:str, modulo:str, zona:str) -> str:
     mes = mes.capitalize()
@@ -24,19 +20,16 @@ def __link(año:int, mes:str, modulo:str, zona:str) -> str:
     if modulo=='Migracion':
         modulo, zona = __referenciador_modulo()[modulo],  __referenciador_zona()[zona.capitalize()]
         mes_num = f'0{meses().index(mes) + 1}'[-2:]
-        link = f'{cwd}/src/geihdanepy/sets/{año}/{mes}.csv/{modulo}_{año}_{mes_num}.csv'
-        print(f"Constructed link: {link}")
+        link = f'https://raw.githubusercontent.com/BautistaDavid/geihdanepy/main/src/geihdanepy/sets/{año}/{mes}.csv/{modulo}_{año}_{mes_num}.csv'
         return link
     else:
         if (año != 2020) | ((año == 2020) & (mes == 'Abril')):
             modulo, zona = __referenciador_modulo()[modulo],  __referenciador_zona()[zona]
-            link = f'{cwd}/src/geihdanepy/sets/{año}/{mes}.csv/{zona}{modulo}.csv'
-            print(f"Constructed link: {link}")
+            link = f'https://raw.githubusercontent.com/BautistaDavid/geihdanepy/main/src/geihdanepy/sets/{año}/{mes}.csv/{zona}{modulo}.csv'
             return link
         elif ((año == 2020) & (mes != 'Abril')):
             modulo, zona = __referenciador_modulo_2020()[modulo.capitalize()],  __referenciador_zona_2020()[zona.capitalize()]
-            link = f'{cwd}/src/geihdanepy/sets/{año}/{mes}.csv/{zona} - {modulo}.csv'
-            print(f"Constructed link: {link}")
+            link = f'https://raw.githubusercontent.com/BautistaDavid/geihdanepy/main/src/geihdanepy/sets/{año}/{mes}.csv/{zona} - {modulo}.csv'
             return link
 
 def datos(año: int, mes: str, modulo: str, zona: str) -> pd.DataFrame:
@@ -83,10 +76,11 @@ def datos_marco_2018(año:int, mes:str, modulo:str) -> pd.DataFrame:
     mes = mes.capitalize()
     if año < 2023:
         modulo = __referenciador_modulo_macro2018()[modulo].lower()
-        link = f'{cwd}/src/geihdanepy/sets/{año}/{mes}/{modulo}.csv'
+        link = f'https://raw.githubusercontent.com/BautistaDavid/geihdanepy/main/src/geihdanepy/sets/{año}/{mes}/{modulo}.csv'
+            
     else:
         modulo = __referenciador_modulo_macro2018_alt()[modulo]
-        link = f'{cwd}/src/geihdanepy/sets/{año}/{mes}/{modulo}.CSV'
+        link = f'https://raw.githubusercontent.com/BautistaDavid/geihdanepy/main/src/geihdanepy/sets/{año}/{mes}/{modulo}.CSV'
     delimiter, encoding = detect_delimiter(link)
 
     try:
@@ -103,7 +97,6 @@ def datos_marco_2018(año:int, mes:str, modulo:str) -> pd.DataFrame:
         try:
             df = pd.read_csv(link, sep=delimiter, encoding='latin1', low_memory=False)
             df = remove_unnamed_cols(df)
-            #print(df.head())
             return df
         except Exception as e:
             print(f"Failed to read data from {link} with 'latin1' encoding: {e}")
